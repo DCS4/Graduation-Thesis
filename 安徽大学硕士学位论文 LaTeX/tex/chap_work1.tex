@@ -50,7 +50,7 @@ E(i)= \lambda_{1} E_{\mathrm{jit}}(i)+\lambda_{2} E_{\mathrm{dif}}(i)+\lambda_{3
 $T \in \mathrm{SE} (3)$，$R \in \mathrm{SO}(3)$并且$t\in\mathbb{R}^3$，其中$T \in \left \{ \mathbf{T_i} \right \}$为4$\times$4矩阵。\par 
 三维重建模型定义在世界坐标系下，并以模型中心为坐标原点。经过刚体变换后，以相机所在位置为坐标原点，模型处于在相机正前方。然后我们只需要将相机坐标系下的模型顶点投影至二维图像平面上即可。根据相机成像模型定义刚性变换为$\mathbf{G}(p)=Tp, p \in \left \{ \mathbf{P_i} \right \}$，变换后的顶点齐次坐标为$\mathbf{g}=[g_x, g_y, g_z,g_w]^\top$。设投影图像平面变换为$\mathbf{U}$，我们按照以下公式计算图像平面中的像素位置：
 \begin{align}
-\mathbf{U}\left(g_{x}, g_{y}, g_{z}, g_{w}\right)=\left(\frac{g_{x} f_{x}}{g_{z}}+c_{x}, \frac{g_{y} f_{y}}{g_{z}}+c_{y}\right)^{\top}
+\mathbf{U}\left(g_{x}, g_{y}, g_{z}, g_{w}\right)=\left(\frac{g_{x} f_{x}}{g_{z}}+c_{x}, \frac{g_{y} f_{y}}{g_{z}}+c_{y}\right)^{\top} \label{project}
 \end{align}
 
 其中，$f_x,f_y$表示相机的在$x,y$方向的焦距长度，$c_x,c_y$分别表示相机的光心坐标。这些参数可以利用相机标定获取。\par
@@ -82,7 +82,7 @@ $T \in \mathrm{SE} (3)$，$R \in \mathrm{SO}(3)$并且$t\in\mathbb{R}^3$，其�
 \end{align}
 其中$\otimes $和$\oplus $分别是按元素计算的乘法运算符和运算符。最后我们按照每个损失对优化相机参数的贡献来赋予每个损失不同的权重。
 \begin{align}
-	L_T = \lambda_c E_c + \lambda_d E_d +\lambda_s E_s
+	L_T = \lambda_c E_c + \lambda_d E_d +\lambda_s E_s \label{pose}
 \end{align}经验上我们设置$\lambda_c = 0.1$,$\lambda_d = 1$,$\lambda_s = 1$。\par
 注意，在不同场景下我们可能微调优化相关的超参数，并且相机位姿本身没有真值可得。评估相机位姿是否准确的唯一方案就是利用优化后的相机位姿$T'$生成新的纹理图，并比较与原始纹理之间的清晰度，越清晰则优化效果越好。
 
@@ -99,7 +99,7 @@ L_T = \left \| \boldsymbol{I}_{A}- \boldsymbol{I}_{A}^{D R} \right \|
 \end{align}
 最终我们的优化目标为:
 \begin{align}
-	L = L_{adv} + \lambda L_T
+	L = L_{adv} + \lambda L_T \label{texture}
 \end{align}
 在优化期间，我们设置纹理图像$P$背景像素值为0，并且设$\lambda$为10。我们会每隔1000轮次会指数衰减$\lambda$的数值。\par
 具体地，对于每一次优化迭代，我们随机选择两个输入图像，$I_A$(源图像)和$I_B$(辅助图像)，以及对应的相机姿态$T_A$和$T_B$，$I_A$为条件。“真实图像”为按照公式\ref{work1:wrap}将辅助图像扭曲到源视角后得到图像$I_{B\to A}$。由于遮挡和相机位姿未对齐等原因，$I_{B\to A}$图像存在残缺现象并且未残缺的部分与源图像$I_A$相比像素会发生轻微的移位导致未对齐。“伪”图像是根据当前的相机位姿$T_A$从三维纹理模型渲染形成的图像。纹理的模糊伪影会反映至渲染图像上，判别器识别伪图像和真实图像间的差异，生成器重新生成纹理像素使得渲染图像和扭曲图像充分接近以匹配图像视角与纹理模型的映射关系。在纹理优化过程中，我们调整纹理像素的颜色，最大化对抗性损失，使其在鉴别器评分下看起来更逼真。在鉴别器优化过程中，我们将对抗性损失最小化，从而更好地对真假样本进行分类。我们将对抗性损失与L1损失进行线性组合，有助于提高纹理优化效果。\par
