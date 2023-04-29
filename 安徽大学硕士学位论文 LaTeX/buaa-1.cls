@@ -131,16 +131,11 @@
  \kern-.26em\raise.5ex\hbox{\rotatebox[origin=c]{180}{S}}%
 }
 
-
-% \usepackage{CJKutf8} % 支持中文
-% \usepackage[T1]{fontenc} % 支持西文字体
-% \usepackage[utf8]{inputenc} % 支持中文输入
-
+%% 预声明
 \usepackage{newfloat}
 \usepackage[english,ngerman]{babel}
-\usepackage[lang=english,listtype+=2,list=off]{bicaption} %设置双语环境
-\usepackage{pdfpages}
-%% 预声明
+\usepackage[lang=english,listtype+=2]{bicaption}
+\usepackage[superscript]{cite} %参考文献上标
 \RequirePackage{ifthen}       % ifthenelse/equal/isundefined等判断比较命令
 \RequirePackage{etoolbox}     % \AtBeginDocument等宏命令
 \RequirePackage{titletoc}     % 目录
@@ -150,13 +145,15 @@
 \RequirePackage{setspace}     % 设置行间距
 \RequirePackage{float}        % 图片
 \RequirePackage{graphicx}     % 图片
-\RequirePackage{subfigure}    % 图片
+% \RequirePackage{subfigure}    % 图片
+\usepackage{subfig}
 \RequirePackage{epstopdf}     % 图片
 \RequirePackage{array}        % 列举
 \RequirePackage{enumitem}     % 列举
 \RequirePackage{booktabs}     % 表格上下粗线
 \RequirePackage{longtable}    % 长表格
 \RequirePackage{multirow}     % 多行表格
+\RequirePackage{makecell}
 \RequirePackage{caption}      % 标题设置
 \RequirePackage{listings}     % 代码环境
 \RequirePackage[ruled,linesnumbered,vlined]{algorithm2e}  % 算法环境
@@ -167,11 +164,14 @@
 \RequirePackage{pifont}       % 画五角星
 \RequirePackage{color}        % To provide color for soul
 \RequirePackage{soul}         % To highlight text
+%%%%%%%%%%%%%%%%%%%%%%%%%% 修改 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \RequirePackage[sort&compress]{natbib}              % BibTex
+%%%%%%%%%%%%%%%%%%%%%%%%%% 修改 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \DeclareGraphicsExtensions{.eps,.ps,.png,.jpg,.bmp} % 声明使用图像格式
 \newcommand{\highlight}[1]{\colorbox{yellow}{#1}}   % 高亮注释
 \allowdisplaybreaks
-\usepackage[OT1]{fontenc} %加粗
+\usepackage[OT1]{fontenc} %加粗，\textbf{}会把字体变成黑体，可用{\bfseries\songti 1) 有效性}来自定义加粗的字体
 \usepackage[g]{esvect} %输出替代 \vec 的矢量符号, 基本命令 \vv, 有指标的矢量用 \vv*
 \usepackage{cleveref}
 
@@ -215,7 +215,7 @@
 {}% name of font to use in the body of the theorem.
 {2\ccwd}% measure of space to indent.
 {\bfseries}% name of head font.
-{.}% punctuation between head and body.
+{}% punctuation between head and body.
 {\ccwd}% space after theorem head; " " = normal interword space
 {}% manually specify head (can be left empty, meaning `normal').
 \theoremstyle{buaa}
@@ -234,6 +234,9 @@
 \renewcommand{\lstlistingname}{代码}
 \renewcommand{\algorithmcfname}{算法}
 
+\renewcommand{\thealgocf}{\arabic{chapter}.\arabic{algocf}}
+\renewcommand{\theAlgoLine}{\arabic{AlgoLine}.\quad}
+
 \newtheorem{theorem}                {\theoremname}     [chapter]
 \newtheorem{assertion}  [theorem]   {\assertionname}
 \newtheorem{axiom}      [theorem]   {\axiomname}
@@ -243,6 +246,7 @@
 \newtheorem{definition}             {\definitionname}  [chapter]
 \newtheorem{example}                {\examplename}     [chapter]
 \newtheorem*{remark}                {\remarkname}
+
 
 % From MDPI.cls
 %\renewcommand{\qed}{\unskip\nobreak\quad\qedsymbol} %% This places the symbol right after the text instead of placing it at the end on the line.
@@ -275,7 +279,7 @@
 \newcommand{\emptypagewords}[1]{\gdef\@emptypagewords{#1}}
 \def\@beginright{} % 摘要、目录、第一章右侧页起 on/off
 \newcommand{\beginright}[1]{\gdef\@beginright{#1}}
-\def\@blindmode{} % 盲评模式 on/off
+\def\@blindmode{} % 摘要、目录、第一章右侧页起 on/off
 \newcommand{\blindmode}[1]{\gdef\@blindmode{#1}}
 
 \newcommand{\Title}[2]{\gdef\@titlecn{#1} \gdef\@titleen{#2}}
@@ -327,9 +331,9 @@
 }
 % 部分标题修改
 \ctexset{%
-  contentsname={\zihao{-2} \bfseries \heiti 目~~~~录},
-  listfigurename={\zihao{-2} \bfseries \heiti 图~清~单},
-  listtablename={\zihao{-2} \bfseries \heiti  表~清~单},
+  contentsname={目~~~~录},
+  listfigurename={图~清~单},
+  listtablename={表~清~单},
 }
 % 标题样式修改
 \ctexset{%
@@ -360,7 +364,6 @@
     format=\zihao{-4} \songti \raggedright,
   }
 }
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 页面设置
 % 设置页面大小
@@ -393,26 +396,25 @@
 {\thecontentslabel\ \ }{}
 {\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
 
-\titlecontents{figure}[0pt]{\settowidth{\hangindent}{图~\thecontentslabel\ \ }\songti\zihao{-4}}
-{图~~\thecontentslabel\ \ }{}
-{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
-
-\titlecontents{table}[0pt]{\settowidth{\hangindent}{表~\thecontentslabel\ \ }\songti\zihao{-4}}
-{表~~\thecontentslabel\ \ }{}
-{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
-
 %%#####################        modify      ####################################
 \captionsetup[figure][bi-first]{name=图} %设置图的英文编号前缀
 \captionsetup[table][bi-first]{name=表} %设置表的英文编号前缀
 \captionsetup[figure][bi-second]{name=Fig.} %设置图的英文编号前缀
 \captionsetup[table][bi-second]{name=Table} %设置表的英文编号前缀
 
+\titlecontents{figure}[0pt]{\settowidth{\hangindent}{图~\thecontentslabel\ \ }\songti\zihao{-4}}
+{图~\thecontentslabel\ \ }{}
+{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
+
+\titlecontents{table}[0pt]{\settowidth{\hangindent}{表~\thecontentslabel\ \ }\songti\zihao{-4}}
+{表~\thecontentslabel\ \ }{}
+{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
 
 
-
+%###############################################################
 
 % 图表环境设置
-\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}  %xintianjia
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}  %modify
 
 \let\org@table\table
 \let\org@endtable\endtable
@@ -440,7 +442,6 @@
   position=top, margin=0mm, format=tabfigformat,
   aboveskip=0pt, belowskip=0pt, justification=centerlast}
 
-
 % Define the new floating environment type "figure2"
 % Use the same file extension as for "figure" (.lof) here
 \DeclareFloatingEnvironment[fileext=lof]{figure2}
@@ -457,8 +458,6 @@
 {\settowidth{\hangindent}{Table~\thecontentslabel\ \ }\songti\zihao{-4}}
 {Table~\thecontentslabel\ \ }{}
 {\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
-
-
 
 %出现在页面中间的浮动对象与上下方文本之间的垂直距离
 %缺省为 12pt plus 2pt minus 2pt。
@@ -484,20 +483,22 @@
 \newcommand\bibstyle@super{\bibpunct{[}{]}{,}{s}{,}{\textsuperscript{,}}}
 \newcommand\bibstyle@numbers{\bibpunct{[}{]}{,}{n}{,}{,}}
 \newcommand\bibstyle@authoryear{\bibpunct{(}{)}{;}{a}{,}{,}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%% 修改 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibpunct{[}{]}{,}{n}{}{}
 \setlength{\bibsep}{0pt}
 \newcommand{\upcite}[1]{\textsuperscript{\cite{#1}}}
+%%%%%%%%%%%%%%%%%%%%%%%%%% 修改 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % 设置PDF
 \hypersetup{%
-  colorlinks=true,   %设置超链接是否采用颜色，默认为 true；
-  bookmarksnumbered=true, %设置书签是否带章节编号，默认为 false；
-  bookmarksopen=true, %设置书签是否展开，默认为 false；
-  pdffitwindow=true, %设置 PDF 文件是否适应当前窗口大小，默认为 false；
-  pdfsubject={BUAA thesis}, %设置 PDF 文件主题；
-  pdfcreator={LaTeXed~By~WeiQM} %设置 PDF 文件创建者信息。
+  colorlinks=false,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdffitwindow=true,
+  pdfsubject={BUAA thesis},
+  pdfcreator={LaTeXed~By~WeiQM}
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 工具函数
@@ -526,6 +527,10 @@
     Please set submite date by 'DateSubmit'.}}{}
   \ifthenelse{\isundefined{\@datedefencey}}{\errmessage{%
     Please set defence date by 'DateDefence'.}}{}
+  \ifthenelse{\equal{\@refcolor}{\empty}}{}{%
+    \ifthenelse{\equal{\@refcolor}{on} \OR \equal{\@refcolor}{off}}{}{
+    \errmessage{Please use 'on' of 'off' for refcolor.}}
+  }
   \ifthenelse{\equal{\@beginright}{\empty}}{}{%
     \ifthenelse{\equal{\@beginright}{on} \OR \equal{\@beginright}{off}}{}{
     \errmessage{Please use 'on' of 'off' for beginright.}}
@@ -558,8 +563,6 @@
     pdfkeywords={\@keywordcn},
     pdfauthor={\@authorcn}
   }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% modify %%%%%%%%%%%%%%%
   \ifthenelse{\equal{\@refcolor}{on}}{%
     \hypersetup{
       allcolors=blue,
@@ -569,11 +572,7 @@
       allcolors=black,
     }
   }
-  
 }
-
-
-
 \newcommand{\TranSecretLevel}[1]{%密级翻译
   \ifthenelse{\equal{\@permission}{public}}{\relax}{
   \ifthenelse{\equal{\@permission}{privacy}}{内~~部}{
@@ -651,9 +650,6 @@
 \AtBeginDocument{%
   \checkinput
   \sethyper
-%图标计数器换章清零
-  \counterwithin{figure}{chapter}
-  \counterwithin{table}{chapter}
 }
 \AfterEndPreamble{%
   \makecovercn
@@ -668,7 +664,7 @@
   \denotation
 
   \renewcommand{\headrulewidth}{0.4pt}
-  \renewcommand{\chaptermark}[1]{\markboth{第\chinese{chapter}章~~#1}{}}
+  \renewcommand{\chaptermark}[1]{\markboth{第\chinese{chapter}章~~#1}{}} 
   \fancyfoot[C]{\zihao{5} \thepage}
   \fancyhead[CE]{\zihao{-5} \leftmark}
   \ifthenelse{\equal{\@thesis}{master} \OR \equal{\@thesis}{professional}}{%
@@ -677,6 +673,7 @@
   }{
     \fancyhead[CO]{\zihao{-5}  XX大学硕士学位论文}
   }
+      
       }{}
   \ifthenelse{\equal{\@thesis}{doctor}}{%
       \fancyhead[CO]{\zihao{-5} 北京航空航天大学博士学位论文}}{}
@@ -688,8 +685,8 @@
 \newcommand{\makecovercn}{% 中文封面
 {\pdfbookmark[0]{中文封面}{makecovercn}
 
-  {\zihao{5} \heiti \bfseries \noindent
-    \makebox[5\ccwd][s]{中图分类号}：{\bfseries \@clc}%
+  {\zihao{5} \heiti \noindent
+    \makebox[5\ccwd][s]{中图分类号}：{\ifthenelse{\equal{\@blindmode}{off}}{\bfseries \@clc}{\bfseries XXX}}%
     \hfill \TranSecretLevel{\@permission}
     \\
     \makebox[5\ccwd][s]{论文编号}：{\ifthenelse{\equal{\@blindmode}{off}}{\bfseries \@studentid}{\bfseries XXX}}
@@ -703,7 +700,7 @@
     \includegraphics{pic/logo-ahu}
   \end{figure}
   \vspace{-10pt}
-  }{\vspace{60pt}}
+  }{\vspace{70pt}}
   \begin{figure}[h]
     \centering
     \ifthenelse{\equal{\@thesis}{master}}{\includegraphics[width=0.9\linewidth]{pic/head-master}}{
@@ -714,36 +711,35 @@
 
   \centering
 
-  \vspace{45pt}
+  \vspace{20pt}
   \begin{spacing}{1.2}
     \ifthenelse{\isundefined{\@subtitlecn}}{\vspace{20pt}}{}
     \zihao{-0} \songti \bfseries \@titlecn
     \ifthenelse{\isundefined{\@subtitlecn}}{\vspace{20pt}}{%
       \\ \vspace{10pt}
-      \zihao{-1} \heiti \@subtitlecn
+      \zihao{1} \@subtitlecn
    }
   \end{spacing}
 
   \vspace{100pt}
   \begin{spacing}{1.8}
     \ziju{0.2} \zihao{-3} \heiti
-     \ifthenelse{\equal{\@blindmode}{off}}{
-    \begin{tabular}{ll}
-      作者姓名  & \@authorcn \\
+    \begin{tabular}{cll}
+      \ifthenelse{\equal{\@blindmode}{off}}{
+      \hspace{-4pt}作者姓名  & \@authorcn \\
       一级学科  & \@major \\
       二级学科  & \@majorsec \\
       指导教师  & \@tutorcn
-     \end{tabular}
       }{
-      \begin{tabular}{ll}
         作者姓名  & XXX \\
-        一级学科  & \@major \\
-        二级学科  & \@majorsec \\
+        一级学科  & XXX \\
+        二级学科  & XXX \\
         指导教师  & XXX
-      \end{tabular}
       }
+    \end{tabular}
   \end{spacing}
-  \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
+
+  \clearautopage
 }}
 \newcommand{\makecoveren}{% 英文封面
 {\pdfbookmark[0]{英文封面}{makecoveren}
@@ -773,33 +769,25 @@
 
     \vspace{200pt}
     {\zihao{-3} \bfseries
-            \ifthenelse{\equal{\@blindmode}{off}}{
-      \begin{tabular}{cll}
-        \ifthenelse{\isundefined{\@cotutorcn}}{%双导师
-          \makebox[70pt][s]{Candidate}:   \@authoren \\
-          \vspace{10pt}\\
-          \makebox[70pt][s]{Supervisor}:  \@tutoren \\
+      \begin{tabular}{rl}
+        \ifthenelse{\isundefined{\@cotutorcn}}{%
+        \ifthenelse{\equal{\@blindmode}{off}}{
+          \hspace{2pt}\makebox[70pt][s]{Candidate:}  & \@authoren \\
+          \vspace{-10pt}\\
+          \makebox[70pt][s]{Supervisor:} & \@tutoren \\
+        }{
+          \makebox[70pt][s]{Candidate:}  & XXX \\
+          \vspace{-10pt}\\
+          \makebox[70pt][s]{Supervisor:} & XXX \\
+        }
         }{%
-          \makebox[77pt][s]{Candidate}:   \@authoren \\
-          \vspace{10pt}\\
+          \makebox[77pt][s]{Candidate}:  & \@authoren \\
+          \vspace{-10pt}\\
           \makebox[77pt][s]{Supervisors}: & \TranDegree{\@tutordegree} \hspace{-8pt} \@tutoren \\
                                           & \TranDegree{\@cotutordegree} \hspace{-8pt} \@cotutoren\\
         }
-     \end{tabular}
-      }{
- \begin{tabular}{cll}
-        \ifthenelse{\isundefined{\@cotutorcn}}{%双导师
-          \makebox[70pt][s]{Candidate}:   XXX \\
-          \vspace{10pt}\\
-          \makebox[70pt][s]{Supervisor}:  XXX \\
-        }{%
-          \makebox[77pt][s]{Candidate}:   XXX \\
-          \vspace{10pt}\\
-          \makebox[77pt][s]{Supervisors}: & XXX \\
-                                                             & XXX\\
-        }
       \end{tabular}
-    }}
+    }
   \end{spacing}
 
 %  \vspace{150pt}
@@ -811,13 +799,13 @@
 %    }
 %  \end{spacing}
 
-  \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
+  \clearautopage
 }}
 \newcommand{\makecoverinner}{% 封面内页
 {\pdfbookmark[0]{题目页}{makecoverinner}
 
-  {\zihao{5} \heiti \bfseries \noindent
-    \makebox[5\ccwd][s]{中图分类号}：{\bfseries \@clc}%
+  {\zihao{5} \heiti \noindent
+    \makebox[5\ccwd][s]{中图分类号}：{\ifthenelse{\equal{\@blindmode}{off}}{\bfseries \@clc}{\bfseries XXX}}%
     \hfill \TranSecretLevel{\@permission}
     \\
     \makebox[5\ccwd][s]{论文编号}：{\ifthenelse{\equal{\@blindmode}{off}}{\bfseries \@studentid}{\bfseries XXX}}
@@ -853,32 +841,31 @@
   \vspace{120pt}
   \begin{spacing}{2.3}
     \zihao{-4} \songti
-    \ifthenelse{\equal{\@blindmode}{off}}{
     \begin{tabular}{lrrrlrrr}
-      作者姓名     &          \multicolumn{3}{l}{\@authorcn}                   & 申请学位级别        &   \multicolumn{3}{l}{ \hspace{-3pt} \@branch } \\
-      指导教师姓名 &          \multicolumn{3}{l}{\@tutorcn}                    & 职\hspace{2\ccwd}称 &                        \multicolumn{3}{l}{\@tutordegree}                    \\
+      \ifthenelse{\equal{\@blindmode}{off}}{
+      \hspace{-3pt}作者姓名     &          \multicolumn{3}{l}{\@authorcn}                   & 申请学位级别        &   \multicolumn{3}{l}{ \hspace{-3pt} \@branch } \\
+      指导教师姓名 &          \multicolumn{3}{l}{\@tutorcn}                    & 职\hspace{2\ccwd}称 &                        \multicolumn{3}{l}{\@tutordegree}                      \\
       学科专业     &          \multicolumn{3}{l}{\@major}                      & 研究方向            &                        \multicolumn{3}{l}{\@field}                            \\
-      学习时间自   & \@dateenrolly\ 年 & \@dateenrollm\ 月 & \@dateenrolld\ 日 & 起至 & \@dategraduatey\ 年 & \@dategraduatem\ 月 & \@dategraduated\ 日止             \\
+      学习时间自   & \@dateenrolly\ 年 & \@dateenrollm\ 月 & \@dateenrolld\ 日 &  起至 & \@dategraduatey\ 年 & \@dategraduatem\ 月 & \@dategraduated\ 日止             \\
       论文提交日期 & \@datesubmity\ 年 & \@datesubmitm\ 月 & \@datesubmitd\ 日 & 论文答辩日期        & \@datedefencey \ 年 & \@datedefencem \ 月 & \@datedefenced \ 日\hspace{\ccwd} \\
 %      学位授予单位 &          \multicolumn{3}{l}{北京航空航天大学}             & 学位授予日期        &                  年 &                  月 &                  日\hspace{\ccwd} \\
-\end{tabular}
-}{
-\begin{tabular}{lrrrlrrr}
-        作者姓名     &          \multicolumn{3}{l}{XXX}                   & 申请学位级别        &   \multicolumn{3}{l}{ \hspace{-3pt} \@branch } \\
+      }{
+        作者姓名     &          \multicolumn{3}{l}{XXX}                   & 申请学位级别        &   \multicolumn{3}{l}{ \hspace{-3pt} XXX } \\
         指导教师姓名 &          \multicolumn{3}{l}{XXX}                    & 职\hspace{2\ccwd}称 &                        \multicolumn{3}{l}{XXX}                      \\
-        学科专业     &          \multicolumn{3}{l}{\@major}                      & 研究方向            &                        \multicolumn{3}{l}{\@field}                         \\
-        学习时间自   & \@dateenrolly\ 年 & \@dateenrollm\ 月 & \@dateenrolld\ 日 & 起至 & \@dategraduatey\ 年 & \@dategraduatem\ 月 & \@dategraduated\ 日止             \\
-        论文提交日期 & \@datesubmity\ 年 & \@datesubmitm\ 月 & \@datesubmitd\ 日 & 论文答辩日期        & \@datedefencey \ 年 & \@datedefencem \ 月 & \@datedefenced \ 日\hspace{\ccwd} \\
+        学科专业     &          \multicolumn{3}{l}{XXX}                      & 研究方向            &                        \multicolumn{3}{l}{XXX}                            \\
+        学习时间自   & XXXX 年 & XX 月 & XX 日 & \hspace{2\ccwd}起至 & XXXX 年 & XX 月 & XX 日止             \\
+        论文提交日期 & XXXX 年 & XX 月 & XX 日 & 论文答辩日期        & XXXX 年 & XX 月 & XX 日\hspace{\ccwd} \\
   %      学位授予单位 &          \multicolumn{3}{l}{北京航空航天大学}             & 学位授予日期        &                  年 &                  月 &                  日\hspace{\ccwd} \\
+      }    
 \end{tabular}
-  }
   \end{spacing}
-  \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
+    \clearautopage
 }}
 \newcommand{\makestatementbuaa}{% 北航声明
 {
   \ifthenelse{\equal{\@blindmode}{off}}{
   \pdfbookmark[0]{独创性声明}{makestatementbuaa}
+
   \begin{spacing}{1.7}%1.5+0.2
     {\zihao{-1} \fangsong \centerline{独创性声明}}
     {\zihao{-4} \fangsong ~\par
@@ -905,6 +892,7 @@
       {签字日期：\hspace{3\ccwd}年\hspace{2\ccwd}月\hspace{2\ccwd}日}    \hspace{2\ccwd}
       签字日期：\hspace{3\ccwd}年\hspace{2\ccwd}月\hspace{2\ccwd}日}
     }
+
   \end{spacing}
   \clearautopage
   }{}
@@ -915,15 +903,15 @@
 {\pdfbookmark[0]{中英摘要}{abstructkeyword}
 
   \begin{spacing}{1.7}%1.5+0.2
-    {\zihao{3} \heiti \bfseries \centerline{摘~~~~要}}
+
+    {\zihao{3} \heiti  \centerline{摘~~~~要}}
     {\zihao{-4} \songti ~\par
       \@abstrctcn \par ~\par
-      {\heiti \bfseries \zihao{-4} 关键词：} {\heiti \zihao{-4} \@keywordcn}
-      % \fontsize{12pt}{14pt}\selectfont
+      {\heiti 关键字：} \@keywordcn
     }
 
     \clearpage
-    \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
+    %\ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
 
     {\zihao{3}  \bfseries \centerline{Abstract}}
     {\zihao{-4} ~\par
@@ -935,9 +923,6 @@
 
   \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
 }}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%生成图目录和表目录%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\makecontextlist}{% 目录
 {\pdfbookmark[0]{目录}{makecontextlist}
   \renewcommand\contentsname{\heiti 目~~~~录}
@@ -952,29 +937,12 @@
       \pdfbookmark[0]{图目录}{listoffigures}
       \listoffigures
       \clearpage
-
-    \includepdf[pages={1}]{contents/fig.pdf}
-      
-    % \renewcommand\listfigurename{Content of Figures}
-    % \pdfbookmark[0]{Content of Figures}{listoffigures}
-    %   \listoffigures
-    %   \clearpage
       \pdfbookmark[0]{表目录}{listoftables}
       \listoftables
-      \clearpage
-
-    % \renewcommand\listtablename{Content of Tables}
-    %  \pdfbookmark[0]{Content of Tables}{listoffigures}
-    % \listoftables
-    %   \clearpage
-    \includepdf[pages={1}]{contents/table.pdf}
-    
     }{}
   }
   \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
 }}
-
-
 
 
 
@@ -1031,6 +999,7 @@
   \bibliographystyle{#1}
   \clearpage
   \phantomsection
+  \renewcommand\bibname{参考文献}
   \addcontentsline{toc}{chapter}{参考文献}
   \bibliography{#2}
 }
@@ -1041,6 +1010,7 @@
   \renewcommand\bibname{参考文献}
   \addcontentsline{toc}{chapter}{参考文献}
 }
+
 
 
 \renewcommand{\appendix}{% 附录
@@ -1068,7 +1038,6 @@
   \ifthenelse{\equal{\@thesis}{doctor}}{\chapter{攻读博士学位期间取得的研究成果}}{
   }}}
 
-
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
   \setcounter{subsubsection}{0}%
@@ -1084,9 +1053,6 @@
   \renewcommand{\theequation}{A\arabic{equation}}
   \setcounter{equation}{0}
 }
-
-
-
 \newcommand{\program}{%参与的科研项目
   \ctexset{chapter/numbering=false}
   \ifthenelse{\equal{\@thesis}{master}}{\chapter{攻读硕士学位期间参与的科研项目}}{
@@ -1108,9 +1074,7 @@
   \setcounter{table}{0}
   \renewcommand{\theequation}{A\arabic{equation}}
   \setcounter{equation}{0}
-
-  }
-
+}
 \newcommand{\acknowledgments}{%致谢
   \ctexset{chapter/numbering=false}
   \chapter{致~~~~谢}

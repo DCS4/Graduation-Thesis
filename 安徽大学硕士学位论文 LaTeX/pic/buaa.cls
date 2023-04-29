@@ -131,15 +131,6 @@
  \kern-.26em\raise.5ex\hbox{\rotatebox[origin=c]{180}{S}}%
 }
 
-
-% \usepackage{CJKutf8} % 支持中文
-% \usepackage[T1]{fontenc} % 支持西文字体
-% \usepackage[utf8]{inputenc} % 支持中文输入
-
-\usepackage{newfloat}
-\usepackage[english,ngerman]{babel}
-\usepackage[lang=english,listtype+=2,list=off]{bicaption} %设置双语环境
-\usepackage{pdfpages}
 %% 预声明
 \RequirePackage{ifthen}       % ifthenelse/equal/isundefined等判断比较命令
 \RequirePackage{etoolbox}     % \AtBeginDocument等宏命令
@@ -159,7 +150,7 @@
 \RequirePackage{multirow}     % 多行表格
 \RequirePackage{caption}      % 标题设置
 \RequirePackage{listings}     % 代码环境
-\RequirePackage[ruled,linesnumbered,vlined]{algorithm2e}  % 算法环境
+\RequirePackage{algorithm2e}  % 算法环境
 \RequirePackage{amsmath}      % 数学
 \RequirePackage{amssymb}      % 数学符号
 \RequirePackage{amsthm}       % 定理
@@ -269,8 +260,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 输入
-\def\@refcolor{} % 给注释及引用使用颜色 on/off
-\newcommand{\refcolor}[1]{\gdef\@refcolor{#1}}
 \def\@emptypagewords{} % 空白页留字
 \newcommand{\emptypagewords}[1]{\gdef\@emptypagewords{#1}}
 \def\@beginright{} % 摘要、目录、第一章右侧页起 on/off
@@ -401,19 +390,7 @@
 {表~~\thecontentslabel\ \ }{}
 {\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
 
-%%#####################        modify      ####################################
-\captionsetup[figure][bi-first]{name=图} %设置图的英文编号前缀
-\captionsetup[table][bi-first]{name=表} %设置表的英文编号前缀
-\captionsetup[figure][bi-second]{name=Fig.} %设置图的英文编号前缀
-\captionsetup[table][bi-second]{name=Table} %设置表的英文编号前缀
-
-
-
-
-
 % 图表环境设置
-\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}  %xintianjia
-
 \let\org@table\table
 \let\org@endtable\endtable
 \renewenvironment{table}[1][h!]
@@ -439,26 +416,6 @@
 \captionsetup[table]{
   position=top, margin=0mm, format=tabfigformat,
   aboveskip=0pt, belowskip=0pt, justification=centerlast}
-
-
-% Define the new floating environment type "figure2"
-% Use the same file extension as for "figure" (.lof) here
-\DeclareFloatingEnvironment[fileext=lof]{figure2}
-% Define the new floating environment type "table2"
-% Use the same file extension as for "table" (.lot) here
-\DeclareFloatingEnvironment[fileext=lot]{table2}
-% We use the titletoc package for customizing "figure2"
-% which is appropriate for the second language captions
-\titlecontents{figure2}[0pt]
-{\settowidth{\hangindent}{Fig.~\thecontentslabel\ \ }\songti\zihao{-4}}
-{Fig.~\thecontentslabel\ \ }{}
-{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
-\titlecontents{table2}[0pt]
-{\settowidth{\hangindent}{Table~\thecontentslabel\ \ }\songti\zihao{-4}}
-{Table~\thecontentslabel\ \ }{}
-{\hspace{.25em}\titlerule*[4pt]{$\cdot$}\contentspage}
-
-
 
 %出现在页面中间的浮动对象与上下方文本之间的垂直距离
 %缺省为 12pt plus 2pt minus 2pt。
@@ -490,14 +447,13 @@
 
 % 设置PDF
 \hypersetup{%
-  colorlinks=true,   %设置超链接是否采用颜色，默认为 true；
-  bookmarksnumbered=true, %设置书签是否带章节编号，默认为 false；
-  bookmarksopen=true, %设置书签是否展开，默认为 false；
-  pdffitwindow=true, %设置 PDF 文件是否适应当前窗口大小，默认为 false；
-  pdfsubject={BUAA thesis}, %设置 PDF 文件主题；
-  pdfcreator={LaTeXed~By~WeiQM} %设置 PDF 文件创建者信息。
+  colorlinks=true,
+  bookmarksnumbered=true,
+  bookmarksopen=true,
+  pdffitwindow=true,
+  pdfsubject={BUAA thesis},
+  pdfcreator={LaTeXed~By~WeiQM}
 }
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% 工具函数
@@ -558,22 +514,7 @@
     pdfkeywords={\@keywordcn},
     pdfauthor={\@authorcn}
   }
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% modify %%%%%%%%%%%%%%%
-  \ifthenelse{\equal{\@refcolor}{on}}{%
-    \hypersetup{
-      allcolors=blue,
-    }
-  }{%
-    \hypersetup{
-      allcolors=black,
-    }
-  }
-  
 }
-
-
-
 \newcommand{\TranSecretLevel}[1]{%密级翻译
   \ifthenelse{\equal{\@permission}{public}}{\relax}{
   \ifthenelse{\equal{\@permission}{privacy}}{内~~部}{
@@ -720,7 +661,7 @@
     \zihao{-0} \songti \bfseries \@titlecn
     \ifthenelse{\isundefined{\@subtitlecn}}{\vspace{20pt}}{%
       \\ \vspace{10pt}
-      \zihao{-1} \heiti \@subtitlecn
+      \zihao{1} \@subtitlecn
    }
   \end{spacing}
 
@@ -918,8 +859,7 @@
     {\zihao{3} \heiti \bfseries \centerline{摘~~~~要}}
     {\zihao{-4} \songti ~\par
       \@abstrctcn \par ~\par
-      {\heiti \bfseries \zihao{-4} 关键词：} {\heiti \zihao{-4} \@keywordcn}
-      % \fontsize{12pt}{14pt}\selectfont
+      {\heiti \bfseries 关键词：} \@keywordcn
     }
 
     \clearpage
@@ -935,14 +875,8 @@
 
   \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
 }}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%生成图目录和表目录%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\makecontextlist}{% 目录
 {\pdfbookmark[0]{目录}{makecontextlist}
-  \renewcommand\contentsname{\heiti 目~~~~录}
-  \renewcommand\listfigurename{图目录}
-  \renewcommand\listtablename{表目录}
   \tableofcontents
   \renewcommand\addvspace[1]{}
   \ifthenelse{\isundefined{\@listfigtab}}{}{%
@@ -952,33 +886,12 @@
       \pdfbookmark[0]{图目录}{listoffigures}
       \listoffigures
       \clearpage
-
-    \includepdf[pages={1}]{contents/fig.pdf}
-      
-    % \renewcommand\listfigurename{Content of Figures}
-    % \pdfbookmark[0]{Content of Figures}{listoffigures}
-    %   \listoffigures
-    %   \clearpage
       \pdfbookmark[0]{表目录}{listoftables}
       \listoftables
-      \clearpage
-
-    % \renewcommand\listtablename{Content of Tables}
-    %  \pdfbookmark[0]{Content of Tables}{listoffigures}
-    % \listoftables
-    %   \clearpage
-    \includepdf[pages={1}]{contents/table.pdf}
-    
     }{}
   }
   \ifthenelse{\equal{\@beginright}{off}}{\clearpage}{\clearautopage}
 }}
-
-
-
-
-
-
 \newcommand{\denotation}{% 缩写定义
 {\ifthenelse{\isundefined{\@abbreviations}}{}{%
     \pdfbookmark[0]{主要符号表}{denotation}
@@ -1034,15 +947,6 @@
   \addcontentsline{toc}{chapter}{参考文献}
   \bibliography{#2}
 }
-
-\newcommand{\bib}{%参考文献
-  \clearpage
-  \phantomsection
-  \renewcommand\bibname{参考文献}
-  \addcontentsline{toc}{chapter}{参考文献}
-}
-
-
 \renewcommand{\appendix}{% 附录
   \ctexset{chapter/numbering=false}
   \chapter{附~~~~录}
@@ -1068,7 +972,6 @@
   \ifthenelse{\equal{\@thesis}{doctor}}{\chapter{攻读博士学位期间取得的研究成果}}{
   }}}
 
-
   \setcounter{section}{0}%
   \setcounter{subsection}{0}%
   \setcounter{subsubsection}{0}%
@@ -1084,33 +987,6 @@
   \renewcommand{\theequation}{A\arabic{equation}}
   \setcounter{equation}{0}
 }
-
-
-
-\newcommand{\program}{%参与的科研项目
-  \ctexset{chapter/numbering=false}
-  \ifthenelse{\equal{\@thesis}{master}}{\chapter{攻读硕士学位期间参与的科研项目}}{
-  \ifthenelse{\equal{\@thesis}{professional}}{\chapter{攻读硕士学位期间参与的科研项目}}{
-  \ifthenelse{\equal{\@thesis}{doctor}}{\chapter{攻读博士学位期间参与的科研项目}}{
-  }}}
-
-  \setcounter{section}{0}%
-  \setcounter{subsection}{0}%
-  \setcounter{subsubsection}{0}%
-  %
-  \gdef\thesection{\@Alph\c@section}%
-  \gdef\thesubsection{\@Alph\c@section.\@arabic\c@subsection}%
-  %
-
-  \renewcommand{\thefigure}{A\arabic{figure}}
-  \setcounter{figure}{0}
-  \renewcommand{\thetable}{A\arabic{table}}
-  \setcounter{table}{0}
-  \renewcommand{\theequation}{A\arabic{equation}}
-  \setcounter{equation}{0}
-
-  }
-
 \newcommand{\acknowledgments}{%致谢
   \ctexset{chapter/numbering=false}
   \chapter{致~~~~谢}

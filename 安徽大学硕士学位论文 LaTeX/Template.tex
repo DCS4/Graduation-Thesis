@@ -72,24 +72,29 @@
 % 请在此处添加自定义宏>>
 %%=================================================================
 
-\documentclass[master,public,twoside,win,AutoFakeBold]{buaa}
+
+\documentclass[master,public,oneside,win,AutoFakeBold]{buaa}
+
 
 %=================================================================
-% 摘要和正文从右侧页开始，单面打印请关闭
-\beginright{off} % 开启: on; 关闭: off[默认];
+% 开启/关闭引用编号颜色：参考文献，公式，图，表，算法 等……
+%\refcolor{on}   % 开启: on[默认]; 关闭: off;
+
+% 摘要和正文从右侧页开始
+\beginright{on} % 开启: on[默认]; 关闭: off;
 
 %盲评模式，开启后不显示学校等信息 ，注意自行修改致谢和学术成果
-\blindmode{off}   % 开启: on; 关闭: off[默认];
+\blindmode{on}   % 开启: on; 关闭: off[默认];
 
 % 空白页留字
 \emptypagewords{[ -- This page is a preset empty page -- ]}
 
 % 不显示超链接方框
-\hypersetup{hidelinks}
+%\hypersetup{hidelinks}
 
 %=================================================================
 % 论文题目及副标题-{中文}{英文}
-\Title{基于可微分渲染的几何模型重建与纹理优化}{Geometric model reconstruction and texture optimization based on differentiable rendering}
+\Title{基于可微分渲染的三维重建与纹理优化}{3D Reconstruction and Texture Optimization Based on Differentiable Rendering}
 %\Subtitle{学位论文~\LaTeX{}模板}
 
 % 学位级别
@@ -106,7 +111,7 @@
 
 % 导师信息-{中文名}{英文名}{职称}
 \Tutor{赵海峰}{Zhao Haifeng}{教授}
-\Cotutor{付燕平}{Fu Yanping}{教师}
+%\Cotutor{付燕平}{Fu Yanping}{教师}
 
 % 学生姓名-{中文名}{英文名}
 \Author{刘勇鑫}{Liu Yongxin}
@@ -129,26 +134,29 @@
 %%=================================================================
 % 摘要-{中文}{英文}
 \Abstract{%
-	实现高保真的纹理映射和和精确的几何重建是三维重建领域的重要课题，因为它在VR/AR、动画游戏等领域都有广阔的应用前景。虽然手持RGB-D相机出现可以方便地进行室内场景的三维重建，但是现有的三维重建算法在重建过程中会遭受各种噪声的影响，导致重建模型和细节上的缺失，因而无法直接应用到在以上真实场景中。以上需求很容易受到以下因素的影响和破坏:(1）深度相机获取的深度时很容易受到噪音、镜头扭曲和量化误差等因素的影响,造成深度测量出现度量误差。(2)在相机位姿估计时很容易出现相机累积误差造成相机位姿漂移。(3)现有的三维重建算法普遍采用TSDF(truncated signed distance field)数据融合技术来进行三维数据融合和表示，它虽然可以利用加权平均来消除大部分的噪音，但是也会平滑掉很多高频的几何细节使得模型趋于平滑，而造成重建的模型出现几何误差。\par
-	对于以上挑战，本文从相机位姿矫正、几何模型细化以及纹理图重生成方面对三维重建模型和纹理进行优化。首先本文借助于可微分渲染方法，我们提出了一个端到端的优化算法，首先利用光度一致性对齐几何模型顶点到每个视角的映射关系，然后用对抗神经网络学习误差容忍度量，容忍纹理重建过程中存在的各中误差，经过实验证明我们的方法能够消除纹理优化中存在的模糊、伪影、裂缝等现象。相比于传统方法我们的方法适用于各种场景，能够弥补传统方法泛化性等缺陷。\par
-	
-	然而单纯依赖神经网络弥补纹理映射中的误差，难以达到理想效果，例如几何模型严重缺失。我们利用可微分渲染优化几何模型，减小重建模型中的几何误差。不仅如此，为了恢复几何模型的高频细节，我们利用自适应细分方法提升模型重建质量。最后提出一个基于可微分渲染的联合优化深度学习框架，同时对相机位姿与纹理，细化和重建模型进行联合。克服现有只对一个因素进行优化而难以达到全局最优解的障碍,并最终得到带有高质量几何细节和高保真纹理的三维重建结果。实验结果表明，与最先进的方法相比，我们的联合优化框架相比于最新纹理优化方法在合成数据上的定量和真实数据上的定性上都产生了显著的性能提高。也展示了我们在恢复出三维重建模型高质量的几何细节和高保真的纹理细节方面具有优势。
+	三维重建是VR/AR、动画游戏等领域的重要应用之一，需要实现高保真的纹理映射和精细的几何重建。然而，现有的三维重建算法在重建过程中会遭受各种噪声的影响，导致重建模型细节上的缺失，无法直接应用到以上场景中。三维重建结果与实际需求不匹配，受以下几个因素的的影响和破坏：（1）深度相机测量物体深度时，易受到运动模糊、相机抖动、光源干扰等因素影响，导致出现度量误差。（2）相机位姿估计时，估计误差会不断累计并传递至下一帧，即使有回环检测和回环矫正，也不能保证相机位姿估计完全正确。（3）三维重建算法通常采用截断符号距离场来表示重建模型，并应用加权平均策略来降低数据噪声。这种加权平均策略会在一定程度上降低几何细节的复杂性，从而使得重建模型表面变得平滑，失去模型本来的高频几何细节。这往往导致重建的三维模型与真实场景在几何形状上存在误差。\par
+	针对三维重建过程中存在的挑战，本文基于可微分渲染提出了一个端到端的优化方法，对相机姿态和纹理进行改进。首先，使用光度一致性纠正几何模型顶点到每个视角的映射关系，然后利用对抗神经网络学习误差容忍度量，容忍纹理重建过程中存在的各种误差。本文方法经过实验证明能够消除初始纹理存在的缺陷，如模糊、伪影和裂缝等。相比于传统方法，本文方法适用于各种具有挑战性的场景，并且可以弥补传统方法泛化能力不足的缺陷。\par
+	虽然矫正相机位姿与纹理重合成算法可以降低纹理映射中的位姿误差和噪声影响，但是当重建模型存在严重错位或几何细节缺失时，难以达到理想效果。因此，本文提出了基于可微分渲染的几何模型优化方法，它能够通过更新几何模型的顶点位置来重建模型的表面形状。此外，本文采用基于三角形质心的自适应细分方法，以增加几何模型表面的平滑度，从而更容易恢复高频几何细节。最后，本文基于可微分渲染提出了一个联合优化深度学习框架，对相机位姿、纹理和几何模型进行联合优化。这种联合优化方式能够克服单独优化某一因素难以达到全局最优解的限制，从而得到高质量的重建模型。实验结果表明，在公共数据集上，本文提出的联合优化框架相比于其他最新纹理优化方法，在恢复三维重建模型高质量几何细节和高保真纹理细节方面表现更好。
 }
 {%
-	Achieving high-fidelity texture mapping and and accurate geometric reconstruction is an important topic in the field of 3D reconstruction because it has broad application prospects in VR/AR, animation games and other fields. Although the emergence of handheld RGB-D cameras can facilitate 3D reconstruction of indoor scenes, existing 3D reconstruction algorithms suffer from various noises during the reconstruction process, resulting in the lack of reconstruction models and details, and thus cannot be directly applied to in the above real scenes. The above requirements are easily affected and damaged by the following factors: (1) The depth acquired by the depth camera is easily affected by noise, lens distortion and quantization errors, resulting in metric errors in depth measurement. (2) In the camera pose estimation is easy to have camera cumulative error caused by camera pose drift. (3) The existing 3D reconstruction algorithms generally use TSDF (truncated signed distance field) data fusion technique to fuse and represent 3D data, which can eliminate most of the noise by using weighted average, but also smooth out many high frequency geometric details to make the model tend to be smooth, and cause geometric errors in the reconstructed model.\par
-	For the above challenges, this paper optimizes the 3D reconstructed model and textures in terms of camera pose correction, geometric model refinement, and texture map regeneration. Firstly, we propose an end-to-end optimization algorithm with the help of differentiable rendering method. Firstly, we use photometric consistency to align the mapping relations from the geometric model vertices to each viewpoint, and then we use adversarial neural network to learn the error tolerance metric to tolerate each medium error in the texture reconstruction process. Compared with traditional methods our method is applicable to various scenes and can make up for the deficiencies such as generalizability of traditional methods.\par
-	However, relying solely on neural networks to compensate for errors in texture mapping is difficult to achieve the desired effect, for example, the geometric model is severely missing. We optimize the geometric model using differentiable rendering to reduce the geometric errors in the reconstructed model. In addition, to recover the high-frequency details of the geometric model, we use an adaptive subdivision method to improve the model reconstruction quality. Finally, we propose a joint optimization deep learning framework based on differentiable rendering to simultaneously combine camera poses with textures, refinement and reconstructed models. We overcome the existing obstacle of optimizing only one factor to achieve the global optimal solution, and finally obtain 3D reconstruction results with high quality geometric details and high fidelity textures. Experimental results show that our joint optimization framework yields significant performance improvements over state-of-the-art methods in both quantitative on synthetic data and qualitative on real data compared to state-of-the-art texture optimization methods. It also demonstrates our advantage in recovering high quality geometric details and high fidelity texture details from 3D reconstructed models.
+	3D reconstruction is one of the important applications in VR/AR, animation and gaming industries, requiring high-fidelity texture mapping and fine geometric reconstruction. However, existing 3D reconstruction algorithms are often affected by various noise during the reconstruction process, leading to missing details in the reconstructed model that cannot be applied directly to the above-mentioned scenarios. Three-dimensional reconstruction results often do not match actual requirements due to the following factors: (1) when measuring the depth of objects using a depth camera, errors can easily occur due to factors such as motion blur, camera shake, and light source interference. (2) When estimating camera pose, estimation errors accumulate and propagate to the next frame, and even with loop closure detection and correction, camera pose estimation cannot be guaranteed to be entirely accurate. (3) 3D reconstruction algorithms usually adopt truncated signed distance fields to represent the reconstructed model, and apply weighted averaging strategies to reduce data noise. Such averaging strategies can reduce the complexity of geometric details to some extent, resulting in a smoother surface of the reconstructed model, losing the high-frequency geometric details of the model itself. This often leads to geometric errors between the reconstructed 3D model and the real scene.\par
+    This thesis proposes an end-to-end optimization method based on differentiable rendering to address the challenges in the 3D reconstruction process, improving camera pose estimation and texture mapping. Firstly, photometric consistency is utilized to correct the vertex-to-view mapping in the geometric model. Secondly, an adversarial neural network is used to learn error tolerance metrics, allowing various errors to be tolerated during the texture reconstruction process. Experimental results show that our method can effectively eliminate initial texture defects such as blurriness, pseudoshadows, and cracks. Compared with traditional methods, our approach is applicable to challenging scenarios and can compensate for the lack of generality in traditional methods.\par
+	Although the method of correcting camera pose and texture synthesis can reduce the pose error and noise in texture mapping, it is difficult to achieve the desired effect when the reconstructed model has serious misalignment or geometric detail missing. Therefore, this thesis proposes a geometry model optimization method based on differentiable rendering, which can rebuild the surface shape of the model by updating the vertex positions of the geometry model. In addition, this thesis adopts an adaptive subdivision method based on triangle centroid to increase the surface smoothness of the geometry model, making it easier to recover high-frequency geometric details. Finally, based on differentiable rendering, this thesis proposes a joint optimization deep learning framework to jointly optimize camera pose, texture and geometry model. This joint optimization method can overcome the limitation of optimizing a single factor and difficult to achieve global optimal solution, thus obtaining high-quality reconstructed models. Experimental results show that, on public datasets, the joint optimization framework proposed in this thesis performs better in restoring high-quality geometric details and high-fidelity texture details of 3D reconstruction models compared to other state-of-the-art texture optimization methods.
 }
+\vspace{-5em}
+
 % 关键字-{中文}{英文}
 \Keyword{%
-	纹理优化，RGB-D重建，可微分渲染，相机位姿
+三维重建，纹理映射，相机位姿估计，可微分渲染
 }{%
-	Texture optimization, RGB-D reconstruction, differentiable rendering, camera pose
+	3D reconstruction,Texture mapping,Camera pose estimation,Differentiable rendering
 }
+
 
 
 % 图表目录
-\Listfigtab{off} % 启用: on[默认]; 关闭: off;
+\Listfigtab{on} % 启用: on[默认]; 关闭: off;
+
 
 % 缩写定义 按tabular环境或其他列表环境编写
 %\Abbreviations{ \centering
@@ -161,6 +169,11 @@
 %  $v$ & 速度 \\
 %\end{tabular}
 %}
+
+% \PassOptionsToPackage{gbnamefmt=lowercase}{biblatex}
+% \usepackage[backend=biber,style=numeric,sorting=none,gbpub=false,bibstyle=gb7714-2015,citestyle=gb7714-2015]{biblatex}
+% \addbibresource[location=local]{ref.bib}
+
 
 \begin{document}
 
@@ -195,18 +208,47 @@
 % 2015版国标GBT7714-2015
 % 2005版国标GBT7714-2005
 
+% 用.bib文件形式引入参考文献
 %\Bib{bst/GBT7714-2015}{ref}
-\bibliographystyle{plain}
-\bibliography{ref}
 
+%手动添加参考文献
+\bib
+\begin{thebibliography}{00}
+\input{tex/References}
+\end{thebibliography}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
 % 附录
 % \input{tex/chap_appendix}
 
 % 攻读学位期间成果
 \input{tex/chap_achievement}
 
+% 攻读学位参与的科研项目
+\input{tex/chap_program}
+
+
+
 % 致谢
-\input{tex/chap_acknowledge}
+%\input{tex/chap_acknowledge}
 
 % 作者简介
 %\input{tex/chap_biography}
