@@ -1,0 +1,240 @@
+% buaa基于ctexbook模板
+% 模板选项:
+%======================
+% I.论文类型(thesis)
+%--------------------
+% a.学术硕士论文（master）[缺省值]
+% b.专业硕士论文（professional）
+% c.博士论文（doctor）
+%--------------------
+% II.密级(permission)
+%--------------------
+% a.公开（public）[缺省值]
+% b.内部（privacy）
+% c.秘密（secret=secret3）
+% c.1.秘密3年（secret3）
+% c.2.秘密5年（secret5）
+% c.3.秘密10年（secret10）
+% c.4.秘密永久（secret*）
+% d.机密（classified=classified5）
+% d.1.机密3年（classified3）
+% d.2.机密5年（classified5）
+% d.3.机密10年（classified10）
+% d.4.机密永久（classified*）
+% e.绝密（topsecret=topsecret10）
+% e.1.绝密3年（topsecret3）
+% e.2.绝密5年（topsecret5）
+% e.3.绝密10年（topsecret10）
+% e.4.绝密永久（topsecret*）
+%--------------------
+% III.打印设置(printtype)
+%--------------------
+% a.单面打印（oneside）[缺省值]
+% b.双面打印（twoside）
+%--------------------
+% IV.系统类型(ostype)
+%--------------------
+% a.win（oneside）[缺省值]
+% b.linux (linux)
+% c.mac (mac)
+%--------------------
+% V.ctexbook设置选项(<ctexbookoptions>)
+%--------------------
+% ...
+%======================
+% 其他说明:
+% 1. Mac系统请使用mac选项，并使用XeLaTeX编译。
+% 2. 可加入额外ctexbook文档类的选项，其将会被传递给ctexbook。
+%    例如：\documentclass[fontset=founder]{buaa}
+% 3. CTeX在Linux下默认使用Fandol字体，为避免某些生僻字无法显示，在系统已安装方正
+%    字体的前提下可通过fontset=founder选项常用方正字体。
+%=================================================================
+% buaa模板已内嵌以下LaTeX工具包:
+%--------------------
+% ifthen, etoolbox, titletoc, remreset,
+% geometry, fancyhdr, setspace,
+% float, graphicx, subfigure, epstopdf,
+% array, enumitem,
+% booktabs, longtable, multirow, caption,
+% listings, algorithm2e, amsmath, amsthm,
+% hyperref, pifont, color, soul,
+% ---
+% For Win: times
+% For Lin: newtxtext, newtxmath
+% For Mac: times, fontspec
+%--------------------
+% 请在此处添加额外工具包>>
+%=================================================================
+% buaa模板已内嵌以下LaTeX宏:
+%--------------------
+% \highlight{text} % 黄色高亮
+%--------------------
+% 请在此处添加自定义宏>>
+%%=================================================================
+
+%master代表学硕 professional代表专硕，其他默认就好
+\documentclass[master,public,twoside,win,AutoFakeBold]{buaa}
+
+
+%============================== 格式设置 ===================================
+% 开启/关闭引用编号颜色：参考文献，公式，图，表，算法 等……
+\refcolor{off}   % 开启: on; 关闭: off[默认];
+
+% 双面打印时增加·空白页·保证封面、目录、摘要和每章的起始页在奇数页。
+% 最终论文可以单面打印，一般不需要打开。
+\beginright{off} % 开启: on; 关闭: off[默认];
+% 上个命令增加的空白页，设置内容
+\emptypagewords{[ -- This page is a preset empty page -- ]}
+
+%盲评模式，开启后不显示学校等信息 ，注意注释致谢部分。
+\blindmode{off}  % 开启: on; 关闭: off[默认];
+
+%首页是否改为蓝色封皮，论文提交图书馆保证首页为蓝色封皮。
+\bluecover{on}  % 开启: on; 关闭: off[默认];
+
+% 图表目录 ---% 启用: on[默认]; 关闭: off;
+\Listfigtab{on} 
+
+
+
+
+%============================= 内容填写 ====================================
+% 论文题目-{中文}{英文}
+\Title{基于可微分渲染的三维重建与纹理优化}{3D Reconstruction and Texture Optimization based on Differentiable Rendering}
+
+%论文副标题-{中文}{英文}，没有副标题注释即可。
+% \Subtitle{}{}
+
+% 学位级别
+\Branch{工学硕士}
+
+% 院系,专业及研究方向
+\Department{计算机科学与技术学院}
+
+% 一级学科/学科专业 
+\Major{计算机科学与技术} % 学硕写`计算机科学与技术` 专硕写 `电子信息`
+
+% 二级学科 
+\Majorsec{计算机科学与技术} % 学硕写`计算机科学与技术` 专硕写 `软件工程`
+
+%研究方向
+\Field{纹理优化}
+
+% 第一导师信息 
+\Tutor{赵海峰}{Zhao Haifeng}{教授} % {中文名}{英文名}{职称}
+
+% 第二导师信息，如果没有第二导师，注释下面一行即可。
+\Cotutor{付燕平}{Fu Yanping}{讲师} % {中文名}{英文名}{职称}
+
+% 学生姓名 
+\Author{刘勇鑫}{Liu Yongxin} % {中文名}{英文名}
+
+% 中图分类号，不用填写
+\CLC{}
+
+% 论文编号 ---10357+自己学号
+\StudentID{10357E20201107}
+
+% 时间节点 
+%入学时间
+\DateEnroll{09}{01}{2020} % {月}{日}{年}
+
+%毕业时间
+\DateGraduate{07}{01}{2023} % {月}{日}{年}
+
+%论文提交日期
+\DateSubmit{05}{23}{2023} % {月}{日}{年}
+
+%论文答辩日期
+\DateDefence{05}{15}{2023} % {月}{日}{年}
+
+
+%%=================================================================
+% 摘要 ---{中文}{英文}
+\Abstract{%
+    三维重建是VR/AR、动画游戏等领域的重要应用之一，需要实现高保真的纹理映射和精细的几何重建。然而，由于现有的基于RGB-D相机的三维重建算法不可避免的遭受噪音的影响，会出现重建模型几何细节丢失和扭曲的问题导致几何误差。在重建的过程中，每一帧的相机位姿依赖于前一帧的计算结果，在计算过程中误差不可避免。经过时间的推移误差会随之累积，估计的相机位姿就会偏离真实位置，从而出现相机位姿估计误差。 受上述误差的影响，在纹理映射过程中，模型顶点投影至图像平面上时就会偏离正确投影位置。通过颜色加权融合后得到的纹理会出现模糊和重影等瑕疵。针对几何误差和相机位姿误差对纹理映射结果的影响，本文提出了两个有效的算法分别对他们造成的纹理映射模糊和重影等纹理进行优化，从而得到高质量、高保真的纹理模型。\par
+    为了解决相机位姿估计误差对纹理带来的影响，本文基于可微分渲染提出了一个端到端的优化方法，对相机姿态和纹理进行改进。首先，使用光度一致性纠正几何模型顶点到每个视角的映射关系，然后利用对抗神经网络学习误差容忍度量，容忍纹理重建过程中存在的各种误差。本文方法经过实验证明能够消除初始纹理存在的缺陷，如模糊、伪影和裂缝等。相比于传统方法，本文方法适用于各种具有挑战性的场景，并且可以弥补传统方法泛化能力不足的缺陷。\par
+    虽然矫正相机位姿与纹理重合成算法可以降低纹理映射中的位姿误差和噪声影响，但是当重建模型存在严重错位或几何细节缺失时，难以达到理想效果。因此，针对几何误差带来的影响。本文提出了基于可微分渲染的几何矫正方法，它能够通过更新几何模型的顶点位置来重建模型的表面形状。此外，本文采用基于三角形质心的自适应细分方法，以增加几何模型表面的平滑度，从而更容易恢复高频几何细节。最后，本文基于可微分渲染提出了一个联合优化深度学习框架，对相机位姿、纹理和几何模型进行联合优化。这种联合优化方式能够克服单独优化某一因素难以达到全局最优解的限制，从而得到高质量的重建模型。实验结果表明，在公共数据集上，本文提出的联合优化框架相比于其他最新纹理优化方法，在恢复三维重建模型高质量几何细节和高保真纹理细节方面表现更好。
+}
+{%
+
+    3D reconstruction is one of the important applications in VR/AR, animation and gaming industries, requiring high-fidelity texture mapping and fine geometric reconstruction. However, as the existing 3D reconstruction algorithms based on RGB-D cameras inevitably suffer from noise, the problem of loss of geometric details and distortion of the reconstructed model can lead to geometric errors. In the reconstruction process, the camera pose of each frame depends on the calculation result of the previous frame, and the error is inevitable during the calculation process. The errors will accumulate over time and the estimated camera pose will deviate from the true position, resulting in camera pose estimation errors. As a result of the above errors, the model vertices will deviate from the correct projection position when they are projected onto the image plane in the texture mapping process. The textures obtained by color-weighted fusion will have defects such as blurring and ghosting. To address the effects of geometric errors and camera positional errors on texture mapping results, two effective algorithms are proposed in this thesis to optimize textures such as blurring and ghosting caused by them, respectively, so as to obtain high-quality and high-fidelity texture models.\par
+    
+     To address the impact of camera pose estimation errors on texture,this thesis proposes an end-to-end optimization method based on differentiable rendering to improve camera poses and textures, addressing the impact of camera pose estimation errors on texture. Firstly, the mapping relationship between the geometry model vertices and each viewpoint is corrected using photometric consistency. Then, an adversarial neural network is employed to learn an error-tolerant metric, accommodating various errors that may exist during the texture reconstruction process. Experimental results demonstrate that this method effectively eliminates the defects present in the initial texture, such as blurring, ghosting, and seams. Compared to traditional methods, this approach is applicable to various challenging scenarios and can compensate for the limitations of traditional methods in terms of generalization capabilities.\par
+    
+    While the camera pose alignment and texture compositing algorithms can mitigate the effects of pose estimation errors and noise in texture mapping, they face difficulties in achieving satisfactory results when there are severe misalignments or geometric details missing in the reconstructed models. Therefore, to tackle the impact of geometric errors, this thesis proposes a differentiable rendering-based geometry correction method that updates the vertex positions of the geometry model to reconstruct the surface shape. Additionally, an adaptive subdivision method based on triangle centroids is employed to increase the smoothness of the geometry model surface, facilitating the recovery of high-frequency geometric details. Finally, a joint optimization deep learning framework based on differentiable rendering is proposed to optimize camera poses, textures, and geometry models collectively. This joint optimization approach overcomes the limitations of separately optimizing individual factors, enabling the generation of high-quality reconstructed models. Experimental results on public datasets demonstrate that the proposed joint optimization framework outperforms other state-of-the-art texture optimization methods in recovering high-quality geometric details and high-fidelity texture details in 3D reconstruction models.\par
+}
+\vspace{-5em}
+
+% 关键字 ---{中文}{英文}
+\Keyword{%
+三维重建，纹理优化，几何模型优化，相机位姿矫正，可微分渲染
+}{%
+3D reconstruction, texture optimization, geometry model optimization, camera pose correction, differentiable rendering
+}
+
+
+\begin{document}
+
+%%=================================================================
+% 标题级别
+%--------------------
+% \chapter{第一章}
+% \section{1.1 小节}
+% \subsection{1.1.1 条}
+% \subsubsection{1.1.1.1}
+% \paragraph{1.1.1.1.1}
+% \subparagraph{1.1.1.1.1.1}
+%--------------------
+%%=================================================================
+
+
+% 第一章绪论
+\input{tex/chapter1-Introduction}
+
+% 第二章相关理论介绍
+\input{tex/chapter2-Theories}
+
+% 第三章工作一
+\input{tex/chapter3-Work1}
+
+% 第四章工作二
+\input{tex/chapter4-Work2}
+
+% 第五章总结与展望
+\input{tex/chapter5-Summary}
+
+
+%================= 参考文献（两种引用方法，建议第二种）==============================
+% （一）用bib形式引入参考文献（某些参考文献有缺失）
+% 2015版国标GBT7714-2015
+% 2005版国标GBT7714-2005
+% 用.bib文件形式引入参考文献
+%\Bib{bst/GBT7714-2015}{ref}
+
+%（二）手动添加参考文献（建议用这种），谷歌学术找国标格式的参考文献放入tex/References.tex中
+\bib
+\begin{thebibliography}{00}
+\input{tex/References}
+\end{thebibliography}
+
+% 附录，暂时用不到
+% \input{tex/Appendix}
+
+% 攻读学位期间成果
+\input{tex/chapter6-Achievements}
+
+% 攻读学位参与的科研项目
+\input{tex/chapter7-Programs}
+
+% 致谢，在盲审模式下需要注释掉。
+\input{tex/chapter8-Acknowledge}
+
+% 作者简介，暂时用不到
+%\input{tex/Biography}
+
+\end{document} 
+
+%-======================================================
+% %添加空白页面命令
+% \myemptypage
